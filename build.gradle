@@ -1,0 +1,38 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.example'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'com.microsoft.playwright:playwright:1.52.0'
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.3'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.24.3'
+}
+
+test {
+    useJUnitPlatform()
+    // run test classes in parallel, methods within a class stay sequential (browser state)
+    systemProperty 'junit.jupiter.execution.parallel.enabled', 'true'
+    systemProperty 'junit.jupiter.execution.parallel.mode.default', 'same_thread'
+    systemProperty 'junit.jupiter.execution.parallel.mode.classes.default', 'concurrent'
+
+    testLogging {
+        events 'passed', 'failed', 'skipped'
+    }
+}

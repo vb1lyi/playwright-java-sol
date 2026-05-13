@@ -19,6 +19,18 @@
 *.tar.gz
 *.rar
 
+# Gradle wrapper jar must be committed — re-include it
+!gradle/wrapper/gradle-wrapper.jar
+
+# Gradle build output and cache
+build/
+.gradle/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*

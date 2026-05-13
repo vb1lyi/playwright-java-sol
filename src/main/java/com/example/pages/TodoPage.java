@@ -1,0 +1,42 @@
+package com.example.pages;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+
+public class TodoPage {
+
+    private final Page page;
+    private final Locator newTodoInput;
+    private final Locator todoItems;
+
+    public TodoPage(Page page) {
+        this.page = page;
+        this.newTodoInput = page.getByPlaceholder("What needs to be done?");
+        this.todoItems = page.locator(".todo-list li");
+    }
+
+    public void navigate(String baseUrl) {
+        page.navigate(baseUrl);
+    }
+
+    public void addTodo(String text) {
+        newTodoInput.fill(text);
+        newTodoInput.press("Enter");
+    }
+
+    public int todoCount() {
+        return todoItems.count();
+    }
+
+    public void completeTodo(String text) {
+        todoItems.filter(new Locator.FilterOptions().setHasText(text))
+                 .locator(".toggle")
+                 .check();
+    }
+
+    public boolean isTodoCompleted(String text) {
+        String cls = todoItems.filter(new Locator.FilterOptions().setHasText(text))
+                              .getAttribute("class");
+        return cls != null && cls.contains("completed");
+    }
+}
