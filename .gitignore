@@ -19,7 +19,7 @@
 *.tar.gz
 *.rar
 
-# Gradle wrapper jar must be committed — re-include it
+# Gradle wrapper jar must be committed
 !gradle/wrapper/gradle-wrapper.jar
 
 # Gradle build output and cache
