@@ -2,19 +2,19 @@
 
 [![Tests](https://github.com/vb1lyi/playwright-java-sol/actions/workflows/test.yml/badge.svg)](https://github.com/vb1lyi/playwright-java-sol/actions/workflows/test.yml)
 
-A test automation project using **Playwright for Java**, covering UI and API testing with a clean Page Object Model, typed response models, and Allure reporting.
+A test automation project using Playwright for Java, covering UI and API testing.
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Browser automation | Playwright for Java 1.52 |
-| API testing | Playwright `APIRequestContext` |
-| Assertions | JUnit 5 |
-| JSON deserialization | Jackson 2.17 |
-| Reporting | Allure 2.29 |
-| Build | Gradle 8 / Java 21 |
-| CI | GitHub Actions |
+| Layer                | Technology                     |
+|----------------------|--------------------------------|
+| Browser automation   | Playwright for Java 1.52       |
+| API testing          | Playwright `APIRequestContext` |
+| Assertions           | JUnit 5                        |
+| JSON deserialization | Jackson 2.17                   |
+| Reporting            | Allure 2.29                    |
+| Build                | Gradle 8 / Java 21             |
+| CI                   | GitHub Actions                 |
 
 ## Project structure
 
@@ -40,7 +40,7 @@ src/
 # Run all tests
 ./gradlew test
 
-# Run tests then open Allure report in browser (serves on localhost, avoids file:// CORS issues)
+# Run tests then open Allure report in browser
 ./gradlew allureServe
 ```
 
