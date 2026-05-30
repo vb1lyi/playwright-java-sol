@@ -8,13 +8,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.file.Paths;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(ScreenshotOnFailureExtension.class)
 public abstract class BaseTest {
 
-    protected static Playwright playwright;
-    protected static Browser browser;
+    protected Playwright playwright;
+    protected Browser browser;
 
     protected BrowserContext context;
     protected Page page;
@@ -22,7 +26,7 @@ public abstract class BaseTest {
     protected ApiClient api;
 
     @BeforeAll
-    static void launchBrowser() {
+    void launchBrowser() {
         playwright = Playwright.create();
         ConfigManager cfg = ConfigManager.get();
         BrowserType browserType = switch (cfg.browser().toLowerCase()) {
@@ -34,7 +38,7 @@ public abstract class BaseTest {
     }
 
     @AfterAll
-    static void closeBrowser() {
+    void closeBrowser() {
         browser.close();
         playwright.close();
     }
