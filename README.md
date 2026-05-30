@@ -1,4 +1,4 @@
-# Playwright-Java-sol
+# Playwright + Java solution
 
 [![Tests](https://github.com/vb1lyi/playwright-java-sol/actions/workflows/test.yml/badge.svg)](https://github.com/vb1lyi/playwright-java-sol/actions/workflows/test.yml)
 
@@ -52,5 +52,7 @@ src/
 
 ## CI
 
-GitHub Actions runs the full suite on every push and pull request to `main`.  
-Allure HTML report and Playwright traces are uploaded as artifacts (retained 30 days and 7 days respectively).
+GitHub Actions runs the full suite on every push and pull request to `main`.
+
+- **Allure report** — published to GitHub Pages after every run: https://vb1lyi.github.io/playwright-java-sol/
+- **Playwright traces** — uploaded as a workflow artifact (retained 7 days)

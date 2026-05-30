@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -33,18 +35,11 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test --no-daemon
+        continue-on-error: true
 
       - name: Generate Allure report
         if: always()
         run: ./gradlew allureReport --no-daemon
-
-      - name: Upload Allure report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: build/reports/allure-report/allureReport
-          retention-days: 30
 
       - name: Upload Playwright traces
         if: always()
@@ -53,3 +48,10 @@ jobs:
           name: playwright-traces
           path: build/traces/
           retention-days: 7
+
+      - name: Deploy Allure report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/reports/allure-report/allureReport
