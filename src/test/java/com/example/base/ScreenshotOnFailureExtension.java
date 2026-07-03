@@ -15,7 +15,7 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
         if (!testFailed) return;
 
         Object instance = context.getRequiredTestInstance();
-        if (instance instanceof BaseTest base && base.page != null) {
+        if (instance instanceof BaseUiTest base && base.page != null) {
             try {
                 byte[] screenshot = base.page.screenshot(
                         new Page.ScreenshotOptions().setFullPage(true));
@@ -24,7 +24,9 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
                         "image/png",
                         new ByteArrayInputStream(screenshot),
                         "png");
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                // page may be null if the test failed during @BeforeEach
+                System.err.println("[ScreenshotOnFailureExtension] Failed to capture screenshot: " + e.getMessage());
             }
         }
     }

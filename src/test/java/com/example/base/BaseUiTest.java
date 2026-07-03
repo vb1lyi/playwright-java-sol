@@ -13,9 +13,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.file.Paths;
 
+/**
+ * Base class for UI tests. Launches a browser and creates a page per test,
+ * with Playwright tracing enabled. Also provides an API client for tests
+ * that need both UI and API interactions.
+ *
+ * @see BaseApiTest use this instead when you only need API testing
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(ScreenshotOnFailureExtension.class)
-public abstract class BaseTest {
+public abstract class BaseUiTest {
 
     protected Playwright playwright;
     protected Browser browser;
@@ -39,8 +46,8 @@ public abstract class BaseTest {
 
     @AfterAll
     void closeBrowser() {
-        browser.close();
-        playwright.close();
+        if (browser != null) browser.close();
+        if (playwright != null) playwright.close();
     }
 
     @BeforeEach
@@ -61,6 +68,6 @@ public abstract class BaseTest {
         context.tracing().stop(new Tracing.StopOptions()
                 .setPath(Paths.get("build/traces/" + safeName + ".zip")));
         context.close();
-        apiContext.dispose();
+        if (apiContext != null) apiContext.dispose();
     }
 }

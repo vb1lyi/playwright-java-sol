@@ -41,6 +41,12 @@ public final class ConfigManager {
 
     // System property overrides config.properties, e.g. -Dbase.url=https://staging.example.com
     private String resolve(String key) {
-        return System.getProperty(key, props.getProperty(key));
+        String value = System.getProperty(key, props.getProperty(key));
+        if (value == null) {
+            throw new IllegalStateException(
+                    "Missing configuration key '" + key + "'. " +
+                    "Add it to src/test/resources/config.properties or pass -D" + key + "=<value>");
+        }
+        return value;
     }
 }

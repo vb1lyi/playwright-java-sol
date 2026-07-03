@@ -20,12 +20,14 @@ dependencies {
     api 'com.microsoft.playwright:playwright:1.52.0'
     implementation 'org.slf4j:slf4j-api:2.0.16'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+    implementation 'io.qameta.allure:allure-java-commons:2.29.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testImplementation 'io.qameta.allure:allure-junit5:2.29.0'
+    testImplementation 'org.assertj:assertj-core:3.27.7'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.3'
-    testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.24.3'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.25.4'
 }
 
 allure {
@@ -40,7 +42,13 @@ tasks.register('installPlaywrightBrowsers', JavaExec) {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        // run only a subset of tests: ./gradlew test -Ptags=smoke
+        // multiple tags: ./gradlew test -Ptags=smoke,regression
+        if (project.hasProperty('tags')) {
+            includeTags project.property('tags').toString().split(',').collect { it.trim() }
+        }
+    }
     // always rerun — test results are the output, not compiled artefacts
     outputs.upToDateWhen { false }
 
