@@ -137,11 +137,11 @@ class PostsApiTest extends BaseApiTest {
 
     @Test
     @Story("Get non-existent post")
-    @Description("Verify GET /posts/999999 returns 200 with default-constructed record — no real post exists")
+    @Description("Verify GET /posts/999999 returns 404 with default-constructed record — no real post exists")
     @Severity(SeverityLevel.NORMAL)
     void getNonExistentPost() {
         APIResponse response = api.get("/posts/999999");
-        assertThat(response.status()).as("status code").isEqualTo(200);
+        assertThat(response.status()).as("status code").isEqualTo(404);
 
         Post post = api.as(response, Post.class);
         assertAll("non-existent post",
