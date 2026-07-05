@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.nio.file.Paths;
 
@@ -29,6 +28,7 @@ public abstract class BaseUiTest {
 
     protected BrowserContext context;
     protected Page page;
+    boolean testFailed; // set by ScreenshotOnFailureExtension before @AfterEach runs
 
     @BeforeAll
     void launchBrowser() {
@@ -50,6 +50,7 @@ public abstract class BaseUiTest {
 
     @BeforeEach
     void setUp() {
+        testFailed = false;
         context = browser.newContext();
         context.tracing().start(new Tracing.StartOptions()
                 .setScreenshots(true)
@@ -58,10 +59,9 @@ public abstract class BaseUiTest {
     }
 
     @AfterEach
-    void tearDown(TestInfo testInfo, ExtensionContext extensionContext) {
+    void tearDown(TestInfo testInfo) {
         String safeName = testInfo.getDisplayName().replaceAll("[^a-zA-Z0-9._-]", "_");
-        boolean failed = extensionContext.getExecutionException().isPresent();
-        Tracing.StopOptions stopOptions = failed
+        Tracing.StopOptions stopOptions = testFailed
                 ? new Tracing.StopOptions().setPath(Paths.get("build/traces/" + safeName + ".zip"))
                 : new Tracing.StopOptions();
         context.tracing().stop(stopOptions);

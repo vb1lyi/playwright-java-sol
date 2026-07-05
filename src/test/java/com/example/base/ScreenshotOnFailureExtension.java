@@ -15,11 +15,15 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
 
     @Override
     public void afterTestExecution(ExtensionContext context) {
-        boolean testFailed = context.getExecutionException().isPresent();
-        if (!testFailed) return;
+        boolean failed = context.getExecutionException().isPresent();
+        if (!failed) return;
 
         Object instance = context.getRequiredTestInstance();
-        if (instance instanceof BaseUiTest base && base.page != null) {
+        if (!(instance instanceof BaseUiTest base)) return;
+
+        base.testFailed = true;
+
+        if (base.page != null) {
             try {
                 byte[] screenshot = base.page.screenshot(
                         new Page.ScreenshotOptions().setFullPage(true));
