@@ -12,7 +12,6 @@ import io.qameta.allure.Story;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
@@ -54,7 +53,7 @@ class PostsApiTest extends BaseApiTest {
 
     @ParameterizedTest
     @Tag("smoke")
-    @CsvSource({"1", "2", "3", "10"})
+    @ValueSource(ints = {1, 2, 3, 10})
     @Story("Get post by id")
     @Description("Verify GET /posts/{id} returns the correct post with matching id and non-blank title")
     @Severity(SeverityLevel.CRITICAL)

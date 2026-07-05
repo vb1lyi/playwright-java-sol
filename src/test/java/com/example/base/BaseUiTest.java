@@ -1,6 +1,5 @@
 package com.example.base;
 
-import com.example.api.ApiClient;
 import com.example.config.ConfigManager;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.AfterAll;
@@ -10,15 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.nio.file.Paths;
 
 /**
- * Base class for UI tests. Launches a browser and creates a page per test,
- * with Playwright tracing enabled. Also provides an API client for tests
- * that need both UI and API interactions.
+ * Base class for UI-only tests. Launches a browser and creates a page per test,
+ * with Playwright tracing enabled.
  *
- * @see BaseApiTest use this instead when you only need API testing
+ * @see BaseHybridTest if your test also needs an API client alongside the browser
+ * @see BaseApiTest if your test only exercises REST endpoints
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(ScreenshotOnFailureExtension.class)
@@ -29,8 +29,6 @@ public abstract class BaseUiTest {
 
     protected BrowserContext context;
     protected Page page;
-    protected APIRequestContext apiContext;
-    protected ApiClient api;
 
     @BeforeAll
     void launchBrowser() {
@@ -57,17 +55,16 @@ public abstract class BaseUiTest {
                 .setScreenshots(true)
                 .setSnapshots(true));
         page = context.newPage();
-        apiContext = playwright.request().newContext(
-                new APIRequest.NewContextOptions().setBaseURL(ConfigManager.get().apiBaseUrl()));
-        api = new ApiClient(apiContext);
     }
 
     @AfterEach
-    void tearDown(TestInfo testInfo) {
+    void tearDown(TestInfo testInfo, ExtensionContext extensionContext) {
         String safeName = testInfo.getDisplayName().replaceAll("[^a-zA-Z0-9._-]", "_");
-        context.tracing().stop(new Tracing.StopOptions()
-                .setPath(Paths.get("build/traces/" + safeName + ".zip")));
+        boolean failed = extensionContext.getExecutionException().isPresent();
+        Tracing.StopOptions stopOptions = failed
+                ? new Tracing.StopOptions().setPath(Paths.get("build/traces/" + safeName + ".zip"))
+                : new Tracing.StopOptions();
+        context.tracing().stop(stopOptions);
         context.close();
-        if (apiContext != null) apiContext.dispose();
     }
 }

@@ -41,8 +41,8 @@ public class TodoPage {
 
     @Step("Check if todo is completed: '{0}'")
     public boolean isTodoCompleted(String text) {
-        String cls = todoItems.filter(new Locator.FilterOptions().setHasText(text))
-                              .getAttribute("class");
-        return cls != null && cls.contains("completed");
+        return todoItems.filter(new Locator.FilterOptions().setHasText(text))
+                        .and(page.locator(".completed"))
+                        .count() > 0;
     }
 }

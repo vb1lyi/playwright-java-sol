@@ -4,10 +4,14 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 
 public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback {
+
+    private static final Logger log = LoggerFactory.getLogger(ScreenshotOnFailureExtension.class);
 
     @Override
     public void afterTestExecution(ExtensionContext context) {
@@ -25,8 +29,7 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
                         new ByteArrayInputStream(screenshot),
                         "png");
             } catch (Exception e) {
-                // page may be null if the test failed during @BeforeEach
-                System.err.println("[ScreenshotOnFailureExtension] Failed to capture screenshot: " + e.getMessage());
+                log.warn("Failed to capture screenshot", e);
             }
         }
     }

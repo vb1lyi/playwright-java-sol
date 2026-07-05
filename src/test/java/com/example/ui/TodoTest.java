@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +30,7 @@ class TodoTest extends BaseUiTest {
 
     @ParameterizedTest
     @Tag("smoke")
-    @CsvSource({"Buy milk", "Walk the dog", "Read a book"})
+    @ValueSource(strings = {"Buy milk", "Walk the dog", "Read a book"})
     @Story("Add todo")
     @Description("Verify single todo can be added for various text values")
     @Severity(SeverityLevel.CRITICAL)
