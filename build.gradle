@@ -32,9 +32,6 @@ dependencies {
 
 allure {
     version = '2.29.0'
-    adapter {
-        autoconfigure = true
-    }
 }
 
 tasks.register('installPlaywrightBrowsers', JavaExec) {
@@ -51,7 +48,7 @@ test {
             includeTags project.property('tags').toString().split(',').collect { it.trim() }
         }
     }
-    // always rerun — test results are the output, not compiled artefacts
+    // always rerun - test results are the output, not compiled artefacts
     outputs.upToDateWhen { false }
 
     // run test classes in parallel, methods within a class stay sequential (browser state)
