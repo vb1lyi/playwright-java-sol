@@ -69,8 +69,8 @@ Tests are tagged for selective execution:
 
 | Tag          | Purpose                                      |
 |-------------|----------------------------------------------|
-| `smoke`     | Critical path — runs in CI on every push     |
-| `regression`| Full suite — all tests                       |
+| `smoke`     | Critical path - runs in CI on every push     |
+| `regression`| Full suite - all tests                       |
 | `demo`      | Deliberate failure for screenshot attachment |
 
 API tests use `assertAll()` for grouped assertions,
